@@ -15,3 +15,19 @@ WHERE stoc_cantidad > ( SELECT stoc_cantidad
 GROUP BY rubr_id, rubr_detalle
 ORDER BY rubr_id ASC
 
+/* Alternativa sin usar una subconsulta:
+
+SELECT rubr_id, rubr_detalle, 
+       COUNT(DISTINCT prod_codigo) AS Cant_articulos, 
+       SUM(s.stoc_cantidad) AS Stock_rubro
+FROM Rubro 
+JOIN Producto  ON prod_rubro = rubr_id
+JOIN STOCK s ON s.stoc_producto = prod_codigo
+JOIN STOCK art_referencia ON art_referencia.stoc_producto = '00000000' AND art_referencia.stoc_deposito = '00'
+WHERE s.stoc_cantidad > art_referencia.stoc_cantidad
+GROUP BY rubr_id, rubr_detalle
+ORDER BY rubr_id ASC
+
+En lugar de usar un WHERE con un subquery, agregamos un JOIN adicional a la misma tabla STOCK, 
+pero filtrando directamente por el producto '00000000' en el depósito '00'.
+*/
