@@ -39,3 +39,16 @@ LEFT JOIN Factura ON clie_codigo = fact_cliente
 --WHERE YEAR(fact_fecha) = 2012
 GROUP BY clie_codigo, clie_razon_social
 ORDER BY sum(fact_total) DESC 
+
+
+-- 2:05:29 
+
+/* Realizar una consulta que muestre para todos los articulos: Codigo, Detalle y Cantidad de articulos que lo componen. Mostrar solo aquellos
+articulos para los cuales el stock promedio por deposito sea mayor a 100 */
+
+SELECT prod_codigo, prod_detalle, comp_cantidad
+FROM Producto
+JOIN Composicion ON comp_producto = prod_codigo 
+
+
+-- SUBCONSULTAS: 

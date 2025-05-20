@@ -27,5 +27,17 @@ WHERE f.fact_fecha >= '2012-01-01'
   AND f.fact_fecha < '2013-01-01'
 GROUP BY p.prod_codigo, p.prod_detalle
 ORDER BY Cantidad_Vendida DESC;
+*/
 
-  */
+/* VARIANTE:
+select item_producto, 
+       (select prod_detalle 
+        from producto 
+        where prod_codigo = item_producto)
+from item_factura 
+join factura 
+    on fact_tipo + fact_sucursal + fact_numero = item_tipo + item_sucursal + item_numero
+--join Producto on item_producto = prod_codigo
+where year(fact_fecha) = 2012
+group by item_producto
+order by sum(item_cantidad)

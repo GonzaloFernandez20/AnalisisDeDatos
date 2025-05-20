@@ -11,4 +11,6 @@ GROUP BY prod_codigo, prod_detalle
 ORDER BY prod_detalle ASC
 
 
-/* COALESCE(SUM(stoc_cantidad), 0) reemplaza los valores null por 0 */
+/* COALESCE(SUM(stoc_cantidad), 0) reemplaza los valores null por 0 
+   SUM(ISNULL(stoc_cantidad, 0)) -> Un poco mejor, mas clara la sintaxis
+*/
