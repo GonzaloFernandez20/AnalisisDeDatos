@@ -24,3 +24,4 @@ JOIN Cliente ON clie_codigo = fact_cliente
 JOIN Empleado ON empl_codigo = fact_vendedor 
 */
 /* Al usar el INTO, guardo el resultado del SELECT en una nueva tabla que creo (Tabla1) */
+ 

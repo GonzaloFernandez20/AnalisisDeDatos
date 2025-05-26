@@ -6,7 +6,7 @@ SELECT e2.empl_codigo AS Codigo_empleado,
        e2.empl_jefe AS Codigo_jefe,
        COUNT(depo_codigo) AS Depositos_asignados
 FROM Empleado e2 /*JEFE*/
-LEFT JOIN DEPOSITO ON depo_encargado = e2.empl_codigo
+LEFT JOIN DEPOSITO ON depo_encargado = e2.empl_codigo or depo_encargado = e2.empl_jefe
 GROUP BY e2.empl_codigo, e2.empl_nombre, e2.empl_apellido, e2.empl_jefe
 ORDER BY e2.empl_codigo
 
