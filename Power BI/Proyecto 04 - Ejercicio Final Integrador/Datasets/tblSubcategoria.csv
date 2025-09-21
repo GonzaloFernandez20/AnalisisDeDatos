@@ -1,0 +1,37 @@
+CategoriaId;SubCategoriaId;SubCategoria
+1;1;Candado para Laptop
+1;2;Mouse
+1;3;Tarjeta de Red USB Wireless
+1;4;Teclado
+2;5;Disco Duro Externo
+2;6;Memoria USB
+3;7;Aud¡fonos
+3;8;Bocinas
+3;9;Diadema
+3;10;Micr¢fono
+4;11;Laptop
+4;12;PC Escritorio
+5;13;Cartucho Negro
+5;14;Cartucho Tricolor
+5;15;T¢ner Color Cian
+5;16;T¢ner Color Magenta
+5;17;T¢ner Color Yellow
+5;18;T¢ner Negro
+6;19;Impresora Laser Color
+6;20;Inyecci¢n de tinta
+6;21;Laser
+6;22;Matriz de Punto
+6;23;Miniprinter
+6;24;Multifuncional Laser
+6;25;Plotter
+7;26;LED
+7;27;Touch-Screen
+8;28;Acces Point
+8;29;Extensor de se¤al
+8;30;Routers
+8;31;Switches
+9;32;Tableta Electr¢nica 10.1 in
+9;33;Tableta Electr¢nica 7 in
+9;34;Tableta Electr¢nica 8 in
+10;35;Videoproyector para uso acad‚mico
+10;36;Videoproyector 

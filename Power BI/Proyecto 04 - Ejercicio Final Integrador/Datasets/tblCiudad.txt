@@ -1,0 +1,68 @@
+ProvinciaID,CiudadID,Ciudad
+1,1,La Plata
+2,2,Córdoba capital
+3,3,Rosario
+5,4,Maipu
+1,5,Mar del Plata
+1,6,Bahía Blanca
+1,7,Tandil
+1,8,San Isidro
+1,9,Quilmes
+1,10,Luján
+1,11,Pergamino
+1,12,Junín
+1,13,San Nicolás
+1,14,San Pedro
+1,15,Tres Arroyos
+1,16,Azul
+1,17,Olavarría
+1,18,Necochea
+1,19,Trenque Lauquen
+1,20,Chascomús
+1,21,Mercedes
+1,22,Zárate
+1,23,Campana
+1,24,San Antonio de Areco
+1,25,Saladillo
+1,26,Chivilcoy
+1,27,Lobos
+1,28,Rojas
+1,29,9 de Julio
+1,30,General Villegas
+1,31,Lincoln
+1,32,Chacabuco
+1,33,Tandil
+1,34,San Pedro
+1,35,Tres Arroyos
+1,36,Azul
+1,37,Olavarría
+1,38,Necochea
+1,39,Trenque Lauquen
+2,40,Villa Maria
+2,41,Rio Cuarto
+2,42,Carlos Paz
+2,43,Alta Gracia
+2,44,San Francisco
+2,45,Rio Tercero
+2,46,Jesus Maria
+2,47,Villa Dolores
+4,48,Nequen
+4,49,Añelo
+4,50,San martin de los andes
+4,51,Villa la angostura
+4,52,Chos malal
+4,53,Zapala
+4,54,Cutral co
+4,55,Junin de los andes
+4,56,Plottier
+3,57,Santo Tome
+3,58,Venado Tuerto
+3,59,Rafaela
+3,60,Esperanza
+3,61,Funes
+5,62,San Rafael
+5,63,San Martin
+5,64,Malargue
+5,65,Tunuyan
+5,66,San Carlos
+5,67,Godoy Cruz

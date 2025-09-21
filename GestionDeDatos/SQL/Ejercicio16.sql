@@ -33,9 +33,40 @@ order by 2 desc
 
 
 /* PRODUCTO QUE MAS SE VENDIO EN 2012 */
-select top 1 sum(fact_total)
+select top 1 item_producto, sum(item_cantidad)
 from item_factura
 join factura on fact_numero+fact_tipo+fact_sucursal = item_numero+item_tipo+item_sucursal
 where year(fact_fecha) = 2012
 group by item_producto
 order by sum(fact_total) desc
+
+/* Mi nueva seleccion: */
+
+select  clie_codigo, 
+        clie_razon_social,
+        sum (item_cantidad) as cant_compras,
+        (select prod_detalle
+            from Producto
+            where prod_codigo = (
+                select  top 1 item_producto
+                from Factura
+                join Item_Factura on fact_tipo+fact_sucursal+fact_numero = item_tipo+item_sucursal+item_numero and year(fact_fecha) = 2012
+                where fact_cliente = clie_codigo
+                group by item_producto
+                order by sum(item_cantidad) desc
+            )
+        ) producto_estrella
+from Factura
+inner join Item_Factura on fact_tipo+fact_sucursal+fact_numero = item_tipo+item_sucursal+item_numero
+right join Cliente on clie_codigo = fact_cliente
+where year(fact_fecha) = 2012
+group by clie_codigo, clie_razon_social
+having SUM(item_cantidad) > (
+                                select  top 1 sum(item_cantidad) as cant_vendidas
+                                from Factura
+                                join Item_Factura on fact_tipo+fact_sucursal+fact_numero = item_tipo+item_sucursal+item_numero
+                                where year(fact_fecha) = 2012
+                                group by item_producto
+                                order by count(distinct item_numero) desc            
+                            )
+order by sum (item_cantidad) asc
