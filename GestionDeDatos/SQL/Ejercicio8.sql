@@ -1,6 +1,11 @@
 /* Mostrar  para  el  o  los  artículos  que  tengan  stock  en  todos  los  depósitos,  nombre  del 
 artículo, stock del depósito que más stock tiene. */
 
+select prod_detalle , MAX(stoc_cantidad) 
+from producto join stock on prod_codigo = stoc_producto
+group by prod_detalle 
+having count(*) = (select count(*) from deposito)
+
 /* Solucion mejor encaminada */
 select prod_detalle, (select top 1 depo_detalle from STOCK join DEPOSITO on depo_codigo = stoc_deposito
 					  where stoc_producto = prod_codigo )

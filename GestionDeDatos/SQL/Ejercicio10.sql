@@ -44,3 +44,24 @@ JOIN Factura ON clie_codigo = fact_cliente
 JOIN Item_Factura ON fact_numero+fact_tipo+fact_sucursal = item_numero+item_tipo+item_sucursal
 GROUP BY clie_razon_social, item_producto
 ORDER BY sum(item_cantidad) DESC
+
+
+
+
+select prod_codigo, prod_detalle, ( select top 1 fact_cliente 
+                                    from factura join item_factura on item_tipo+item_sucursal+item_numero = fact_tipo+fact_sucursal+fact_numero
+                                    where prod_codigo = item_producto 
+                                    group by fact_cliente 
+                                    order by sum(item_cantidad) desc
+                                  ) 
+from producto
+where prod_codigo in 
+                    (select top 10 item_producto
+                    from item_factura
+                    group by item_producto
+                    order by sum(item_cantidad) desc) 
+                  or prod_codigo in 
+                    (select top 10 item_producto
+                    from item_factura
+                    group by item_producto
+                    order by sum(item_cantidad))
