@@ -1,4 +1,4 @@
-/*
+/* PARCIAL 25-06-2024
 Sabiendo que si un producto no es vendido en un depósito determinado entonces no posee registros en él.
 Se requiere una consulta SQL que, para todos los productos que se quedaron sin stock en un depósito (cantidad 0 o nula) y poseen un stock mayor al punto de reposición en otro depósito, devuelva:
 
