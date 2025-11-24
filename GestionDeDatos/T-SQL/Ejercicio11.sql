@@ -1,24 +1,30 @@
-/* ej 11 Cree el/los objetos de base de datos necesarios para que dado un código de
+/* 11. Cree el/los objetos de base de datos necesarios para que dado un código de
 empleado se retorne la cantidad de empleados que este tiene a su cargo (directa o
 indirectamente). Solo contar aquellos empleados (directos o indirectos) que
 tengan un código mayor que su jefe directo. */
 
-alter function ej_t11 (@jefe numeric(6))
-returns int 
-as 
+alter function cant_empleados_a_cargo(@empl_jefe numeric(6))
+returns int
+as
 begin
-    declare @empleado numeric(6), @cantidad int 
-    select @cantidad = 0
-    declare c1 cursor for select empl_codigo from empleado where empl_jefe = @jefe
-    open c1
-    fetch c1 into @empleado 
+    declare @cant_empleados int; set @cant_empleados = 0
+    declare @empleado numeric(6)
+    declare c_empleados cursor for select empl_codigo from Empleado where empl_jefe = @empl_jefe
+
+    open c_empleados
+    fetch next from c_empleados into @empleado
+
     while @@FETCH_STATUS = 0
-    begin  
-        select @cantidad = @cantidad + 1 + dbo.ej_t11(@empleado)   
-        fetch c1 into @empleado 
-    end 
-    close c1
-    deallocate c1
-    return @cantidad 
+        begin 
+            set @cant_empleados += 1 + dbo.cant_empleados_a_cargo(@empleado)
+            fetch next from c_empleados into @empleado
+        end
+
+    close c_empleados
+    deallocate c_empleados
+    return @cant_empleados
 end
 go
+
+
+select empl_jefe, dbo.cant_empleados_a_cargo(empl_jefe) from Empleado group by empl_jefe

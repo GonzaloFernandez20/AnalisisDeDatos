@@ -11,7 +11,7 @@ de empleados que había sin jefe antes de la ejecución. */
    pero, como debemos devolver un valor, le pasamos una variable output para dejar ahi el valor guardado */
 
 
-create procedure ej3 @cantidad int output
+alter procedure ej3 @cantidad int output
 as 
 begin
     select @cantidad = count(*) from Empleado where empl_jefe is null

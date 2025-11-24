@@ -7,63 +7,72 @@ En caso que no alcance el stock de un deposito se descontara del siguiente y asi
 hasta agotar los depositos posibles. En ultima instancia se dejara stock negativo
 en el ultimo deposito que se desconto. */
 
-CREATE OR ALTER TRIGGER venta_reduce_stock ON Item_Factura AFTER INSERT
-AS
-BEGIN
-	DECLARE 
-	@producto char(8),
-	@cantidad decimal(12,2);
-	DECLARE c_inserted CURSOR FOR
-	SELECT i.item_producto, i.item_cantidad
-	FROM Inserted i;
-	OPEN c_inserted;
-	FETCH NEXT FROM c_inserted INTO @producto, @cantidad;
-	WHILE @@FETCH_STATUS = 0
-	BEGIN
-		EXEC dbo.descontar_stock @producto, @cantidad;
-		FETCH NEXT FROM c_inserted INTO @producto, @cantidad;
-	END
-	CLOSE c_inserted;
-	DEALLOCATE c_inserted;
-END
-go 
+create or alter procedure actualizacion_stock (@producto char(8), @cantidad decimal(12,2))
+as
+begin 
+	declare @stoc_cantidad decimal(12,2), @deposito char(2)
+	declare @cant_restante decimal(12,2)
+	declare @ultimo_deposito char(2)
 
-CREATE OR ALTER PROCEDURE descontar_stock(@producto char(8), @cantidad decimal(12,2)) 
-AS 
-BEGIN
-	DECLARE @depo char(2), 
-	@restante decimal(12,2) = @cantidad,
-	@deposito char(8),
-	@stock_actual decimal(12,2);
-	DECLARE c_depositos CURSOR FOR
-	SELECT stoc_deposito, stoc_cantidad
-	FROM STOCK
-	WHERE stoc_producto = @producto
-	ORDER BY stoc_cantidad DESC;
-	OPEN c_depositos;
-	FETCH NEXT FROM c_depositos INTO @deposito, @stock_actual;
-	WHILE @@FETCH_STATUS = 0 AND @restante > 0
-	BEGIN
-		DECLARE @descuento decimal(12,2) = 
-			CASE
-			WHEN @stock_actual >= @restante THEN @restante
-			ELSE @stock_actual
-		END;
-		UPDATE STOCK
-		SET stoc_cantidad = stoc_cantidad - @descuento
-		WHERE stoc_producto = @producto AND stoc_deposito = @deposito;
-		SET @restante -= @descuento;
-        select @depo = @deposito
-        FETCH NEXT FROM c_depositos INTO @deposito, @stock_actual;
-	END
-	CLOSE c_depositos;
-	DEALLOCATE c_depositos;
-	IF @restante > 0
-	BEGIN
-		UPDATE STOCK
-		SET stoc_cantidad = stoc_cantidad - @restante
-		WHERE stoc_producto = @producto
-		AND stoc_deposito = @depo
-	END
-END
-GO
+	declare c_depositos cursor for select stoc_deposito, stoc_cantidad
+								   from STOCK
+								   join DEPOSITO on depo_codigo = stoc_deposito
+								   where stoc_producto = @producto
+								   order by stoc_cantidad desc
+
+	open c_depositos
+	fetch next from c_depositos into @deposito, @stoc_cantidad
+
+	set @cant_restante = @cantidad
+
+	while @@FETCH_STATUS = 0 and @cant_restante > 0
+		begin
+			if @stoc_cantidad < @cant_restante
+				begin
+					update STOCK
+					set stoc_cantidad = 0
+					where stoc_deposito = @deposito and stoc_producto = @producto;
+
+					set @cant_restante -= @stoc_cantidad
+					fetch next from c_depositos into @deposito, @stoc_cantidad
+				end
+			else --stoc_cantidad > @cant_restante
+				begin
+					update STOCK
+					set stoc_cantidad -= @cant_restante
+					where stoc_deposito = @deposito and stoc_producto = @producto;
+
+					set @cant_restante = 0
+					fetch next from c_depositos into @deposito, @stoc_cantidad
+				end
+			set @ultimo_deposito = @deposito
+		end
+
+	if @cant_restante > 0
+		begin
+			update STOCK
+			set stoc_cantidad -= @cant_restante
+			where stoc_deposito = @ultimo_deposito and stoc_producto = @producto;
+		end
+end
+go
+
+
+
+create or alter trigger trig_actualizacion_stock on Item_Factura after insert
+as
+begin
+	declare @producto char(8), @cantidad decimal(12,2)
+	declare c_articulos cursor for select item_producto, item_cantidad from inserted
+	open c_articulos
+	fetch next from c_articulos into @producto, @cantidad
+
+	while @@FETCH_STATUS = 0
+		begin
+			exec dbo.actualizacion_stock @producto, @cantidad
+			fetch next from c_articulos into @producto, @cantidad
+		end
+	close c_articulos
+	deallocate c_articulos
+end
+go
